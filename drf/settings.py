@@ -36,9 +36,6 @@ SECRET_KEY = "django-insecure-#5gk&^j-2c(=bttap*)#%mmadaa^+qu%6euu1fo!u0)wph&z2i
 # SECURITY WARNING: don't run with debug turned on in production!
 
 
-ALLOWED_HOSTS = []
-
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -48,6 +45,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "corsheaders",
     "rest_framework",
     "rest_framework.authtoken",
     "djoser",
@@ -63,20 +61,29 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
 ]
 
+
+ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "").split(",")
+# ALLOWED_HOSTS = ["*"]
+# ALLOWED_HOSTS = ['example.com', 'subdomain.example.com', 'localhost', '127.0.0.1']
+
+
+# CORS_ALLOW_ALL_ORIGINS = True
+
+# O especifica los orígenes permitidos:
+CORS_ALLOWED_ORIGINS = os.getenv("CORS_ALLOWED_ORIGINS", "").split(",")
 ROOT_URLCONF = "drf.urls"
-
-
-
-
-
 
 
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [
+            os.path.join(BASE_DIR, "frontend", "build"),
+            ],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -88,6 +95,7 @@ TEMPLATES = [
         },
     },
 ]
+
 
 WSGI_APPLICATION = "drf.wsgi.application"
 
@@ -149,7 +157,13 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = "static/"
+# STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "frontend", "build"),
+]
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 

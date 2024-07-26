@@ -111,3 +111,6 @@ GitHub.sublime-settings
 
 # Specific to this project
 .env.prod
+/staticfiles/
+frontend/bun.lockb
+frontend/.env.production
