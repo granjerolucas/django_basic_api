@@ -9,7 +9,8 @@ export default defineConfig({
     },
     output: {
       path: "./build",
-      publicPath: "/static/",
+      // publicPath: "/static/",
+      publicPath: process.env.NODE_ENV === 'production' ? '/static/' : '/'
     },
     // ...
   },
